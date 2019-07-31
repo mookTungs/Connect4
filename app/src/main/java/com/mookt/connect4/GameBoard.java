@@ -42,15 +42,18 @@ public class GameBoard {
         totalEmpty = width * height;
     }
 
-    public boolean isGameOver(int x, int y, int player){
+    //return 1 if game over, 0 if not, -1 if draw
+    public int isGameOver(int x, int y, int player){
         if(checkHorizontal(y, player) || checkVertical(x, player) || checkLeftDiagonal(x, y, player) || checkRightDiagonal(x, y, player)){
-            return true;
+            return 1;
+        }else if(totalEmpty == 0){
+            return -1;
         }
 
-        return false;
+        return 0;
     }
 
-    public boolean checkHorizontal(int y, int player){
+    private boolean checkHorizontal(int y, int player){
         int consecutive = 0;
 
         for(int x = 0; x < width; x++){
@@ -66,7 +69,7 @@ public class GameBoard {
         return false;
     }
 
-    public boolean checkVertical(int x, int player){
+    private boolean checkVertical(int x, int player){
         int consecutive = 0;
 
         for(int y = 0; y < height; y++){
@@ -82,16 +85,16 @@ public class GameBoard {
         return false;
     }
 
-    public boolean checkLeftDiagonal(int x, int y, int player){
+    private boolean checkLeftDiagonal(int x, int y, int player){
         int tempX = 0;
         int tempY = 0;
         int consecutive = 0;
 
         if(x > y){
             tempX = x - y;
-            tempY = y - y;
+            tempY = 0;
         }else if(x < y){
-            tempX = x - x;
+            tempX = 0;
             tempY = y - x;
         }
 
@@ -111,7 +114,7 @@ public class GameBoard {
         return false;
     }
 
-    public boolean checkRightDiagonal(int x, int y, int player){
+    private boolean checkRightDiagonal(int x, int y, int player){
         int tempX;
         int tempY;
         int consecutive = 0;
@@ -121,7 +124,7 @@ public class GameBoard {
             tempY = x + y - 6;
         }else{
             tempX = y + x;
-            tempY = y - y;
+            tempY = 0;
         }
 
         while(tempX >= 0 && tempY < height){

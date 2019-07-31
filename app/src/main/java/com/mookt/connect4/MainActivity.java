@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         gameBoard = new GameBoard();
         initBoard();
         turn = P1;
-        playerTurn = (ImageView) findViewById(R.id.playerTurn);
+        playerTurn = findViewById(R.id.playerTurn);
         playerTurn.setImageResource(R.drawable.ic_yellow);
     }
 
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initBoard(){
-        TableLayout tableLayout = (TableLayout) findViewById(R.id.tableLayout);
+        TableLayout tableLayout = findViewById(R.id.tableLayout);
         boardView = new Cell[GameBoard.height][GameBoard.width];
 
         for(int y = 0; y < GameBoard.height; y++){
@@ -106,8 +106,9 @@ public class MainActivity extends AppCompatActivity {
             boardView[dropped][cell.x].setImageResource(color);
             gameBoard.updateBoard(cell.x, dropped, turn);
 
-            if(gameBoard.isGameOver(cell.x, dropped, turn)){
-                gameOver();
+            int over = gameBoard.isGameOver(cell.x, dropped, turn);
+            if(over != 0){
+                gameOver(over);
             }else if(turn == P1){
                 turn = P2;
                 playerTurn.setImageResource(R.drawable.ic_red);
@@ -118,9 +119,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void gameOver(){
-        String s = "";
-        if(turn == P1){
+    //-1 == draw, 1 == someone won
+    public void gameOver(int tied){
+        String s;
+        if(tied == -1){
+            s = "It's a tied";
+        }else if(turn == P1){
             s = "Yellow Win!";
         }else{
             s = "Red Win!";
